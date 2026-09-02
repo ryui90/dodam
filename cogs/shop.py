@@ -6,7 +6,6 @@ import database as db
 from config import COLOR_MAIN
 
 
-
 def parse_color(color_str):
     if not color_str:
         return COLOR_MAIN
@@ -124,7 +123,7 @@ class CategorySelect(discord.ui.Select):
 
         lines = "\n".join(f"• **{name}** — {price:,}P" for _, price, name in roles_data)
         embed = discord.Embed(
-            title=f"{category}",
+            title=f"🛒 {category}",
             description=f"구매하실 역할을 아래에서 선택해주세요.\n\n{lines}",
             color=COLOR_MAIN,
         )
