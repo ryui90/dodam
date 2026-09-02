@@ -213,13 +213,11 @@ class Shop(commands.Cog):
             )
             return
 
-        category_lines = "\n".join(f"• {cat} : {count}개" for cat, count in categories)
         embed = discord.Embed(
             title=제목,
-            description=f"{내용}\n\n{category_lines}",
+            description=내용,
             color=parse_color(색상),
         )
-        embed.set_footer(text="카테고리를 선택하면 구매 가능한 역할이 표시됩니다")
 
         view = CategoryView(interaction.guild.id, categories)
         self.bot.add_view(view)
