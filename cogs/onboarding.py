@@ -83,14 +83,20 @@ class Onboarding(commands.Cog):
         else:
             raise error
 
-    # ---------- !이름변경 ----------
-    @commands.command(name="이름변경")
+    # ---------- !이름 ----------
+    NICK_PREFIX = "『 신입 』 "  # 닉네임 앞에 붙는 고정 문구. 바꾸고 싶으면 이 글자만 수정하세요.
+
+    @commands.command(name="이름", aliases=["이름변경"])
     @commands.has_permissions(manage_nicknames=True)
     async def rename(self, ctx: commands.Context, member: discord.Member, *, new_name: str):
+        final_nick = f"{self.NICK_PREFIX}{new_name}"
+        if len(final_nick) > 32:  # 디스코드 닉네임 최대 길이
+            await ctx.send("닉네임이 너무 깁니다. 32자를 넘을 수 없습니다.")
+            return
         try:
-            await member.edit(nick=new_name, reason=f"{ctx.author}에 의한 닉네임 변경")
+            await member.edit(nick=final_nick, reason=f"{ctx.author}에 의한 닉네임 변경")
         except discord.Forbidden:
-            await ctx.send("닉네임을 변경할 권한이 없습니다.")
+            await ctx.send("닉네임을 변경할 권한이 없습니다. 봇 역할이 대상보다 위에 있는지 확인해주세요.")
             return
         await ctx.message.add_reaction("✅")
 
@@ -99,7 +105,7 @@ class Onboarding(commands.Cog):
         if isinstance(error, commands.MissingPermissions):
             await ctx.send("이 명령어는 닉네임 관리 권한이 있어야 사용할 수 있습니다.")
         elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("사용법: `!이름변경 @유저 새닉네임`")
+            await ctx.send("사용법: `!이름 @유저 이름`")
         else:
             raise error
 
