@@ -61,7 +61,6 @@ class ItemSelect(discord.ui.Select):
                 label=name[:100],
                 description=f"{price:,}P",
                 value=str(role_id),
-                emoji=ITEM_EMOJI,
             )
             for role_id, price, name in roles_data[:25]
         ]
@@ -90,7 +89,6 @@ class CategorySelect(discord.ui.Select):
                 discord.SelectOption(
                     label=cat[:100],
                     description=f"{count}개",
-                    emoji=CATEGORY_EMOJI,
                     value=cat[:100],
                 )
                 for cat, count in categories[:25]
