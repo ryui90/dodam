@@ -5,8 +5,8 @@ from discord.ext import commands
 import database as db
 from config import COLOR_MAIN
 
-CATEGORY_EMOJI = "📦"
-ITEM_EMOJI = "🎟️"
+CATEGORY_EMOJI = ""
+ITEM_EMOJI = ""
 
 
 def parse_color(color_str):
