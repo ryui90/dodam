@@ -59,7 +59,7 @@ class Onboarding(commands.Cog):
             await ctx.send("역할을 변경할 권한이 없습니다. 봇 역할이 대상 역할들보다 위에 있는지 확인해주세요.")
             return
 
-        embed = discord.Embed(title="✅ 새로운 멤버 안내 완료", color=COLOR_MAIN, timestamp=discord.utils.utcnow())
+        embed = discord.Embed(title="서버 안내 로그", color=COLOR_MAIN, timestamp=discord.utils.utcnow())
         embed.set_thumbnail(url=member.display_avatar.url)
         embed.add_field(name="유저", value=member.mention, inline=True)
         embed.add_field(name="성별", value=gender, inline=True)
