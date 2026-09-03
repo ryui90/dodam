@@ -7,8 +7,8 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 DB_PATH = os.getenv("DB_PATH", "bot_data.db")
 
 # 서버 대표 컬러 (연초록 -> 노랑)
-COLOR_MAIN = 71aeff
-COLOR_SUB = cf98ff
+COLOR_MAIN = 0x71aeff
+COLOR_SUB = 0xcf98ff
 GRADIENT_START = (113, 174, 255)  # 연초록 RGB
 GRADIENT_END = (207, 152, 255)     # 노랑 RGB
 
