@@ -33,6 +33,19 @@ class Tracking(commands.Cog):
             return 0
         return max(int(time.time() - start), 0)
 
+    async def get_all_voice_totals(self, guild_id):
+        """DB에 저장된 음성 시간 + 현재 접속 중인 세션의 실시간 시간을 합쳐서 반환"""
+        rows = await db.get_all_users(guild_id)
+        now = time.time()
+        totals = {}
+        for row in rows:
+            total = row["voice_seconds"]
+            key = (guild_id, row["user_id"])
+            if key in self.voice_sessions:
+                total += int(now - self.voice_sessions[key])
+            totals[row["user_id"]] = total
+        return totals
+
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         if member.bot:
@@ -63,15 +76,16 @@ class Tracking(commands.Cog):
         await interaction.response.defer()
         member = 유저 or interaction.user
 
-        key = (interaction.guild.id, member.id)
-        live_extra = int(time.time() - self.voice_sessions[key]) if key in self.voice_sessions else 0
-
-        row = await db.get_user(interaction.guild.id, member.id)
-        total_seconds = row["voice_seconds"] + live_extra
+        await db.get_user(interaction.guild.id, member.id)  # 유저 레코드 보장
+        totals = await self.get_all_voice_totals(interaction.guild.id)
+        total_seconds = totals.get(member.id, 0)
         hours = total_seconds // 3600
         minutes = (total_seconds % 3600) // 60
 
-        rank, total = await db.get_voice_rank(interaction.guild.id, member.id)
+        sorted_ids = sorted(totals.keys(), key=lambda uid: totals[uid], reverse=True)
+        rank = sorted_ids.index(member.id) + 1 if member.id in sorted_ids else len(sorted_ids) + 1
+        total = len(sorted_ids)
+
         file = await create_stat_card(
             member, "음성 누적 시간",
             f"{hours}시간 {minutes}분",
