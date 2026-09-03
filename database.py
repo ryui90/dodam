@@ -119,6 +119,16 @@ async def add_points(guild_id, user_id, delta):
         await conn.commit()
 
 
+async def get_all_users(guild_id):
+    async with aiosqlite.connect(DB_PATH) as conn:
+        conn.row_factory = aiosqlite.Row
+        cursor = await conn.execute(
+            "SELECT * FROM users WHERE guild_id=?", (guild_id,)
+        )
+        rows = await cursor.fetchall()
+        return [dict(r) for r in rows]
+
+
 async def get_voice_rank(guild_id, user_id):
     async with aiosqlite.connect(DB_PATH) as conn:
         await _ensure_user(conn, guild_id, user_id)
