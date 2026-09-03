@@ -5,6 +5,8 @@ from discord.ext import commands
 import database as db
 from config import COLOR_MAIN
 
+ITEM_EMOJI = "🎟️"
+
 
 def parse_color(color_str):
     if not color_str:
@@ -60,6 +62,7 @@ class ItemSelect(discord.ui.Select):
                 label=name[:100],
                 description=f"{price:,}P",
                 value=str(role_id),
+                emoji=ITEM_EMOJI,
             )
             for role_id, price, name in roles_data[:25]
         ]
